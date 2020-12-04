@@ -19,7 +19,7 @@ class L1_plus_perceptualLoss(nn.Module):
 
         # vgg = models.vgg19(pretrained=True).features
         vgg19 = models.vgg19(pretrained=False)
-        vgg19.load_state_dict(torch.load('/home1/menyf/data/deepfashion/vgg19-dcbb9e9d.pth'))
+        vgg19.load_state_dict(torch.load('deepfashion/vgg19-dcbb9e9d.pth'))
         vgg = vgg19.features
 
 
@@ -28,13 +28,15 @@ class L1_plus_perceptualLoss(nn.Module):
             self.vgg_submodel.add_module(str(i),layer)
             if i == perceptual_layers:
                 break
-        self.vgg_submodel = torch.nn.DataParallel(self.vgg_submodel, device_ids=gpu_ids).cuda()
+        # self.vgg_submodel = torch.nn.DataParallel(self.vgg_submodel, device_ids=gpu_ids).cuda()
+        self.vgg_submodel = torch.nn.DataParallel(self.vgg_submodel, device_ids=gpu_ids)
 
         print(self.vgg_submodel)
 
     def forward(self, inputs, targets):
         if self.lambda_L1 == 0 and self.lambda_perceptual == 0:
-            return Variable(torch.zeros(1)).cuda(), Variable(torch.zeros(1)), Variable(torch.zeros(1))
+            # return Variable(torch.zeros(1)).cuda(), Variable(torch.zeros(1)), Variable(torch.zeros(1))
+            return Variable(torch.zeros(1)), Variable(torch.zeros(1)), Variable(torch.zeros(1))
         # normal L1
         loss_l1 = F.l1_loss(inputs, targets) * self.lambda_L1
 
@@ -44,14 +46,16 @@ class L1_plus_perceptualLoss(nn.Module):
         mean[1] = 0.456
         mean[2] = 0.406
         mean = Variable(mean)
-        mean = mean.resize(1, 3, 1, 1).cuda()
+        # mean = mean.resize(1, 3, 1, 1).cuda()
+        mean = mean.resize(1, 3, 1, 1)
 
         std = torch.FloatTensor(3)
         std[0] = 0.229
         std[1] = 0.224
         std[2] = 0.225
         std = Variable(std)
-        std = std.resize(1, 3, 1, 1).cuda()
+        # std = std.resize(1, 3, 1, 1).cuda()
+        std = std.resize(1, 3, 1, 1)
 
         fake_p2_norm = (inputs + 1)/2 # [-1, 1] => [0, 1]
         fake_p2_norm = (fake_p2_norm - mean)/std

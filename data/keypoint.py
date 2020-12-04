@@ -88,7 +88,7 @@ class KeyDataset(BaseDataset):
             P2 = self.transform(P2_img)
 
         # segmentation
-        SP1_name = self.split_name(P1_name, 'semantic_merge3')
+        SP1_name = self.split_name(P1_name, 'semantic_merge')
         SP1_path = os.path.join(self.dir_SP, SP1_name)
         SP1_path = SP1_path[:-4] + '.npy'
         SP1_data = np.load(SP1_path)

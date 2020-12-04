@@ -34,7 +34,6 @@ class TransferModel(BaseModel):
                                         opt.ngf, opt.which_model_netG, opt.norm, not opt.no_dropout, opt.init_type, self.gpu_ids,
                                         n_downsampling=opt.G_n_downsampling)
 
-
         if self.isTrain:
             use_sigmoid = opt.no_lsgan
             if opt.with_D_PB:
@@ -82,14 +81,14 @@ class TransferModel(BaseModel):
             elif opt.L1_type == 'l1_plus_perL1':
                 self.criterionL1 = L1_plus_perceptualLoss(opt.lambda_A, opt.lambda_B, opt.perceptual_layers, self.gpu_ids, opt.percep_is_l1)
             else:
-                raise Excption('Unsurportted type of L1!')
+                raise Exception('Unsupported type of L1!')
 
             if opt.use_cxloss:
                 self.CX_loss = CXLoss(sigma=0.5)
                 if torch.cuda.is_available():
                     self.CX_loss.cuda()
                 self.vgg = VGG()
-                self.vgg.load_state_dict(torch.load(os.path.abspath(os.path.dirname(opt.dataroot)) + '/vgg_conv.pth'))
+                self.vgg.load_state_dict(torch.load(os.path.join('deepfashion', 'vgg_conv.pth')))
                 for param in self.vgg.parameters():
                     param.requires_grad = False
                 if torch.cuda.is_available():

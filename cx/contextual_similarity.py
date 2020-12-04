@@ -164,18 +164,22 @@ class VGGModule(nn.Module):
 
 def contextual_similarity(inputs, batch_size=32, style_layers=('r32', 'r42')):
     # vgg pretrained.
-    vgg = VGGModule('max').cuda()
+    # vgg = VGGModule('max').cuda()
+    vgg = VGGModule('max')
     vgg.train(False)
     vgg.load_state_dict(torch.load('/mnt/cephfs_new_wj/lab_ad_idea/maoyiming/data/vgg_conv.pth'))
-    loss_layer = CXLoss().cuda()
+    # loss_layer = CXLoss().cuda()
+    loss_layer = CXLoss()
     cx = 0.0
     dataloader_ = torch.utils.data.DataLoader(inputs, batch_size=batch_size)
     with torch.no_grad():
         for ref, fake in tqdm(dataloader_, ascii=True, ncols=80):
             ref.requires_grad = False
             fake.requires_grad = False
-            vgg_style = vgg(ref.cuda(), style_layers)
-            vgg_fake = vgg(fake.cuda(), style_layers)
+            # vgg_style = vgg(ref.cuda(), style_layers)
+            # vgg_fake = vgg(fake.cuda(), style_layers)
+            vgg_style = vgg(ref, style_layers)
+            vgg_fake = vgg(fake, style_layers)
             for j, (ref_single, fake_single) in enumerate(zip(vgg_style, vgg_fake)):
                 cx += float(loss_layer(ref_single, fake_single))
                 del ref_single, fake_single

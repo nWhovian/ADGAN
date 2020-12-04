@@ -8,7 +8,7 @@ from .vgg import VGG
 import os
 import torchvision.models.vgg as models
 
-# Moddfied with AdINGen
+# Modified with AdINGen
 class ADGen(nn.Module):
     # AdaIN auto-encoder architecture
     def __init__(self, input_dim, dim, style_dim, n_downsample, n_res, mlp_dim, activ='relu', pad_type='reflect'):
@@ -75,7 +75,7 @@ class VggStyleEncoder(nn.Module):
         super(VggStyleEncoder, self).__init__()
         # self.vgg = models.vgg19(pretrained=True).features
         vgg19 = models.vgg19(pretrained=False)
-        vgg19.load_state_dict(torch.load('/home1/menyf/data/deepfashion/vgg19-dcbb9e9d.pth'))
+        vgg19.load_state_dict(torch.load('deepfashion/vgg19-dcbb9e9d.pth'))
         self.vgg = vgg19.features
 
         for param in self.vgg.parameters():

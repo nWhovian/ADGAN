@@ -22,13 +22,15 @@ web_dir = os.path.join(opt.results_dir, opt.name, '%s_%s' % (opt.phase, opt.whic
 
 webpage = html.HTML(web_dir, 'Experiment = %s, Phase = %s, Epoch = %s' % (opt.name, opt.phase, opt.which_epoch))
 
+print(webpage)
+
 print(opt.how_many)
 print(len(dataset))
 
 model = model.eval()
 print(model.training)
 
-opt.how_many = 999999
+opt.how_many = 10
 # test
 for i, data in enumerate(dataset):
     print(' process %d/%d img ..'%(i,opt.how_many))

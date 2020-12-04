@@ -22,17 +22,17 @@ train_path = os.path.join(root_fashion_dir, 'train')
 if not os.path.exists(train_path):
     os.mkdir(train_path)
 
-# for item in train_images:
-#     id = item.index('id', 7)
-#     if (item[4:3] == "MEN"):
-#         line = train_path + '/' + 'fashion' + 'MEN' + item[8: id - 1]
-#     else:
-#         line = train_path + '/' + 'fashion' + 'WOMEN' + item[10: id - 1]
-#     line = line + 'id' + item[id + 3: id + 11] + item[id + 12: id + 16] + item[id + 17:]
-#
-#     from_ = os.path.join(root_fashion_dir, item)
-#     to_ = os.path.join(line)
-#     os.system('cp %s %s' % (from_, to_))
+for item in train_images:
+    id = item.index('id', 7)
+    if (item[4:7] == "MEN"):
+        line = train_path + '/' + 'fashion' + 'MEN' + item[8: id - 1]
+    else:
+        line = train_path + '/' + 'fashion' + 'WOMEN' + item[10: id - 1]
+    line = line + 'id' + item[id + 3: id + 11] + item[id + 12: id + 16] + item[id + 17:]
+
+    from_ = os.path.join(root_fashion_dir, item)
+    to_ = os.path.join(line)
+    os.system('cp %s %s' % (from_, to_))
 
 test_path = os.path.join(root_fashion_dir, 'test')
 if not os.path.exists(test_path):
@@ -40,7 +40,7 @@ if not os.path.exists(test_path):
 
 for item in test_images:
     id = item.index('id', 7)
-    if (item[4:3] == "MEN"):
+    if (item[4:7] == "MEN"):
         line = test_path + '/' + 'fashion' + 'MEN' + item[8: id - 1]
     else:
         line = test_path + '/' + 'fashion' + 'WOMEN' + item[10: id - 1]

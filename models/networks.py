@@ -134,30 +134,26 @@ def define_G(input_nc, output_nc, ngf, which_model_netG, norm='batch', use_dropo
     if use_gpu:
         assert (torch.cuda.is_available())
 
-    if which_model_netG == 'PATN':
-        assert len(input_nc) == 2
-        netG = PATNetwork(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout,
-                                           n_blocks=9, gpu_ids=gpu_ids, n_downsampling=n_downsampling)
-    elif which_model_netG == 'AdaGen':
-        style_dim = 512
-        n_res =8
-        mlp_dim = 256
-        netG = AdaINGen(input_nc, ngf, style_dim, n_downsampling, n_res, mlp_dim)
-    elif which_model_netG == 'ADGen':
+    # elif which_model_netG == 'AdaGen':
+    #     style_dim = 512
+    #     n_res =8
+    #     mlp_dim = 256
+    #     netG = AdaINGen(input_nc, ngf, style_dim, n_downsampling, n_res, mlp_dim)
+    if which_model_netG == 'ADGen':
         style_dim = 512
         n_res =8
         mlp_dim = 256
         netG = ADGen(input_nc, ngf, style_dim, n_downsampling, n_res, mlp_dim)
-    elif which_model_netG == 'AdaGen_SS_mix':
-        style_dim = 512
-        n_res = 8
-        mlp_dim = 256
-        netG = AdaINGen_SS_mix(input_nc, ngf, style_dim, n_downsampling, n_res, mlp_dim)
+    # elif which_model_netG == 'AdaGen_SS_mix':
+    #     style_dim = 512
+    #     n_res = 8
+    #     mlp_dim = 256
+    #     netG = AdaINGen_SS_mix(input_nc, ngf, style_dim, n_downsampling, n_res, mlp_dim)
     else:
         raise NotImplementedError('Generator model name [%s] is not recognized' % which_model_netG)
     if len(gpu_ids) > 1:
         netG = torch.nn.DataParallel(netG, device_ids=gpu_ids)
-    netG.cuda()
+    # netG.cuda()
     init_weights(netG, init_type=init_type)
     return netG
 
@@ -181,7 +177,7 @@ def define_D(input_nc, ndf, which_model_netD,
                                   which_model_netD)
     if len(gpu_ids) > 1:
         netD = torch.nn.DataParallel(netD, device_ids=gpu_ids)
-    netD.cuda()
+    # netD.cuda()
 
     return netD
 
